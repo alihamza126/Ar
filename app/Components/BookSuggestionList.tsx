@@ -60,22 +60,25 @@ const BookSuggestionList = () => {
     fetchSuggestions()
   }, [statusFilter])
 
-  const handleApprove = (id: string) => {
-    confirm({
-      title: "Are you sure you want to approve this suggestion?",
-      icon: <ExclamationCircleOutlined />,
-      content: "This will mark the suggestion as approved and notify the teacher.",
-      onOk: async () => {
-        try {
-          await axios.patch(`/api/admin/book-suggestions/${id}/approve`)
-          message.success("Suggestion approved successfully")
-          fetchSuggestions()
-        } catch (error) {
-          console.error("Failed to approve suggestion:", error)
-          message.error("Failed to approve suggestion")
-        }
-      },
-    })
+  const handleApprove = async (id: string) => {
+    // confirm({
+    //   title: "Are you sure you want to approve this suggestion?",
+    //   icon: <ExclamationCircleOutlined />,
+    //   content: "This will mark the suggestion as approved and notify the teacher.",
+    //   onOk: async () => {
+
+    //   },
+    // })
+
+    try {
+      await axios.patch(`/api/admin/book-suggestions/${id}/approve`)
+      message.success("Suggestion approved successfully")
+      fetchSuggestions()
+    } catch (error) {
+      fetchSuggestions()
+      console.error("Failed to approve suggestion:", error)
+      message.error("Failed to approve suggestion")
+    }
   }
 
   const showRejectModal = (id: string) => {
@@ -95,6 +98,7 @@ const BookSuggestionList = () => {
       setRejectionReason("")
       fetchSuggestions()
     } catch (error) {
+      fetchSuggestions()
       console.error("Failed to reject suggestion:", error)
       message.error("Failed to reject suggestion")
     }
